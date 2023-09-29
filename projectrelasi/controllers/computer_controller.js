@@ -28,10 +28,11 @@ export const getComputerById = async(req, res) => {
 }
 
 export const createComputer = async(req, res) => {
-    const { nama_computer } = req.body;
+    const { nama_computer, user_id } = req.body;
     try {
     const newComputer = await Computer.create({
-        nama_computer: nama_computer
+        nama_computer: nama_computer,
+        user_id: user_id
     });
     res.status(201).json(newComputer.toJSON());
     } catch (error) {

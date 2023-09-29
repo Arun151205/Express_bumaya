@@ -13,10 +13,10 @@ export const getAllProjects = async(req, res) => {
 export const getProjectById = async(req, res) => {
     const projectId = req.params.id;
     try {
-    const project = await Project.findOne({
-        where: { id: projectId },
+        const project = await Project.findOne({
+            where: { id: projectId },
         include: [Departement]
-    });
+        });
     if (project) {
         res.status(200).json(project);
     } else {
