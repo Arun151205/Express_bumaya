@@ -3,7 +3,7 @@ import User from "../models/user.js";
 
 export const getAllUsers = async(req, res) => {
     try {
-    const users = await User.findAll();
+    const users = await User.findAll({include: [Departement]});
     res.status(200).json(users);
     } catch (error) {
     res.status(500).json({ error: "Gagal membaca data User: " + error.message });
@@ -40,4 +40,14 @@ export const createUser = async(req, res) => {
     } catch (error) {
         res.status(500).json({ error: "Gagal membuat user: " + error.message });
     }
+}
+
+export const updateUser = async(req, res) => {
+    const user = await User.update(req.body,{where:{id:req.params.id}});
+    return res.json("User berhasil update");
+}
+
+export const deleteUser = async(req, res) => {
+    const user = await User.destroy({where:{id:req.params.id}});
+    return res.json("User telah dihapus");
 }

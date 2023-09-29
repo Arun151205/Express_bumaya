@@ -38,3 +38,19 @@ export const createComputer = async(req, res) => {
     res.status(500).json({ error: "Gagal membuat komputer baru: " + error.message });
     }
 }
+
+export const updateComputer = async(req, res) => {
+    const computer = await Computer.update(
+        req.body,{
+            where: {
+                id: req.params.id
+            }
+        }
+        );
+    return res.json("Computer berhasil update");
+}
+
+export const deleteComputer = async(req, res) => {
+    const computer = await Computer.destroy({where:{id:req.params.id}});
+    return res.json("Computer telah dihapus");
+}

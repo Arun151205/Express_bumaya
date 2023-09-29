@@ -18,11 +18,11 @@ app.use(router);
 
 try {
     await db.authenticate();
-    // Computer.sync();
-    // User.sync();
-    // Departement.sync();
-    // Project.sync();
-    // DeptProj.sync();
+    Computer.sync();
+    User.sync();
+    Departement.sync();
+    Project.sync();
+    DeptProj.sync();
     console.log("database connected");
 } catch (error) {
     console.error(error);
