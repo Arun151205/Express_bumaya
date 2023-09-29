@@ -1,14 +1,12 @@
 import Departement from "../models/departement.js";
-import Project from "../models/project.js";
+import User from "../models/user.js";
 
 export const getAllDepartements = async(req, res) => {
     try {
-    const departements = await Departement.findAll({
-        include: [ Project ]
-        });
-    res.status(200).json(departements.map(computer => computer.toJSON()));
+        const departements = await Departement.findAll();
+        res.status(200).json(departements);
     } catch (error) {
-    res.status(500).json({ error: "Gagal membaca data komputer: " + error.message });
+        res.status(500).json({ error: "Gagal membaca data komputer: " + error.message });
     }
 }
 
@@ -17,7 +15,7 @@ export const getDepartementById = async(req, res) => {
     try {
     const departement = await Departement.findOne({
         where: { id: departementId },
-        include: [ Project ]
+        include: User
         });
     if (departement) {
         res.status(200).json(departement.toJSON());
@@ -30,21 +28,37 @@ export const getDepartementById = async(req, res) => {
 }
 
 export const createDepartement = async (req, res) => {
-    const response = await Departement.create(req.body);
-    if (req.body.project_id) {
-        const project = await Project.findOne({ where: { id: req.body.project_id } });
-        await response.addProject(project);
+    try {
+        const response = await Departement.create(req.body);
+        return res.json(response);
+    } catch (error) {
+        console.log(error.message);
     }
-    return res.json(response);
-    }
+}
 
 
 export const updateDepartement = async(req, res) => {
-    const departement = await Departement.update(req.body,{where:{id:req.params.id}});
-    return res.json("Departement berhasil update", departement);
+    try {
+        const response = await Departement.update(req.body, {
+            where: {
+                id: req.params.id
+            }
+        });
+        res.json('succses');
+    } catch (error) {
+        console.log(error.message);
     }
+}
 
 export const deleteDepartement = async(req, res) => {
-    const departement = await Departement.destroy({where:{id:req.params.id}});
-    return res.json("Departement telah dihapus", departement);
+    try {
+        const response = await Departement.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
+        res.json('succses');
+    } catch (error) {
+        console.log(error.message);
+    }
 }
