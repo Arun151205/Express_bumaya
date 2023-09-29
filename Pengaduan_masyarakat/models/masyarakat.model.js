@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import db from "../config/db.js";
+import Pengaduan from "./pengaduan.model.js";
 
 const { DataTypes } = Sequelize;
 
@@ -28,8 +29,11 @@ const Masyarakat = db.define(
     }
 );
 
+Masyarakat.hasMany(Pengaduan, { foreignKey: "nik"});
+Pengaduan.belongsTo(Masyarakat, { foreignKey: "nik"});
+
 export default Masyarakat;
 
-// (async () => {
-//     await db.sync();
-// })();
+(async () => {
+    await db.sync();
+})();

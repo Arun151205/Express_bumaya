@@ -1,5 +1,6 @@
 import {Sequelize} from "sequelize";
 import db from "../config/db.js";
+import Tanggapan from "./tanggapan.model.js";
 
 const {DataTypes} = Sequelize;
 
@@ -15,11 +16,15 @@ const Pengaduan = db.define('pengaduan',{
         },
     nik: DataTypes.CHAR,
     isi_laporan: DataTypes.TEXT,
-    foto: DataTypes.STRING,
+    image: DataTypes.STRING,
+    url: DataTypes.STRING,
     status: DataTypes.ENUM("0", "proses", "selesai"),
 },{
     freezeTableName: true
 });
+
+Pengaduan.hasMany(Tanggapan, {foreignKey: "id_pengaduan"});
+Tanggapan.belongsTo(Pengaduan, {foreignKey: "id_pengaduan"});
 
 export default Pengaduan;
 

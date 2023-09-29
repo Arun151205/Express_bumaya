@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import db from "../config/db.js"
+import Tanggapan from "./tanggapan.model.js";
 
 const { DataTypes } = Sequelize;
 
@@ -23,6 +24,9 @@ const Petugas = db.define("petugas", {
         freezeTableName: true,
     }
 );
+
+Petugas.hasMany(Tanggapan, {foreignKey: "id_petugas"});
+Tanggapan.belongsTo(Petugas, {foreignKey: "id_petugas"});
 
 export default Petugas;
 

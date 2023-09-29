@@ -1,13 +1,15 @@
-import express from "express";
 import Masyarakat from "../models/masyarakat.model.js";
-
-const router = express.Router();
+import Pengaduan from "../models/pengaduan.model.js";
+import argon2 from "argon2";
 
 // Read (GET all)
 export const getAllMasyarakat = async (req, res) => {
     try {
-    const masyarakatList = await Masyarakat.findAll();
-    res.status(200).json(masyarakatList);
+    const response = await Masyarakat.findAll({
+        attributes: ["uuid", "nik", "nama", "username", "telp"],
+
+    });
+    res.status(200).json(response);
     } catch (error) {
     res.status(400).json({ error: error.message });
     }
@@ -16,13 +18,15 @@ export const getAllMasyarakat = async (req, res) => {
 // Read (GET by Id)
 export const getMasyarakatById = async (req, res) => {
     try {
-    const masyarakat = await Masyarakat.findOne({
+    const response = await Masyarakat.findOne({
+        attributes: ["uuid", "nik", "nama", "username", "telp"],
         where: {
             uuid: req.params.id,
         },
+        include: [{ model: Pengaduan }]
     });
-    if (masyarakat) {
-        res.status(200).json(masyarakat);
+    if (response) {
+        res.status(200).json(response);
     } else {
         res.status(404).json({ error: "Masyarakat not found" });
     }
@@ -37,55 +41,74 @@ export const createMasyarakat = async (req, res) => {
     try {
         // Pastikan data yang diperlukan ada dalam req.body
         const { nik, nama, username, password, telp } = req.body;
+        const hashPassword = await argon2.hash(password);
 
-        // Buat entitas Masyarakat baru dengan data yang diberikan
-        const newMasyarakat = await Masyarakat.create({
+        await Masyarakat.create({
             nik: nik,
             nama: nama,
             username: username,
-            password: password, // Perhatikan bahwa Anda mungkin ingin melakukan hashing di sini
+            password: hashPassword, // Perhatikan bahwa Anda mungkin ingin melakukan hashing di sini
             telp: telp,
         });
-
-        res.status(201).json({ newMasyarakat });
+        res.status(201).json({ message: "Berhasil Register!" });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
 
-// Update (Patch)
 export const editMasyarakat = async (req, res) => {
-    try {
-    const [updated] = await Masyarakat.update(req.body, {
-        where: { uuid: req.params.id },
+    const user = await Masyarakat.findOne({
+        where: {
+            uuid: req.params.id,
+        },
     });
-    if (updated) {
-        const updatedMasyarakat = await Masyarakat.findOne({
+    if (!user) return res.status(404).json({ message: "User tidak ditemukan!" });
+    
+    const { nik, nama, username, password, telp } = req.body;
+    let hashPassword;
+    if (password === "" || password === null) {
+        hashPassword = user.password;
+    } else {
+        hashPassword = await argon2.hash(password);
+    }
+    
+    try {
+        await Masyarakat.update(
+        {
+            nik: nik || user.nik,
+            nama: nama || user.nama,
+            username: username || user.username,
+            password: hashPassword,
+            telp: telp || user.telp,
+        },
+        {
             where: {
                 uuid: req.params.id,
             },
-        });
-        res.status(200).json(updatedMasyarakat);
-    } else {
-        res.status(404).json({ error: "Masyarakat not found" });
-    }
+        }
+    );
+        res.status(201).json({ msg: "Berhasil memperbarui profil!" });
     } catch (error) {
-    res.status(400).json({ error: error.message });
+        res.status(500).json({ message: error });
     }
 };
 
-// Delete (DELETE)
 export const deleteMasyarakat = async (req, res) => {
-    try {
-    const deleted = await Masyarakat.destroy({
-        where: { uuid: req.params.id },
+    const user = await Masyarakat.findOne({
+        where: {
+            uuid: req.params.id,
+        },
     });
-    if (deleted) {
-        res.status(204).json({message: "Berhasil menghapus akun!"});
-    } else {
-        res.status(404).json({ error: "Masyarakat not found" });
-    }
+    if (!user)
+        return res.status(404).json({ message: "Pengguna tidak ditemukan!" });
+    try {
+        await Masyarakat.destroy({
+        where: {
+            uuid: req.params.id,
+        },
+    });
+    res.status(200).json({ message: "Berhasil menghapus akun!" });
     } catch (error) {
-    res.status(400).json({ error: error.message });
+        res.status(500).json({ message: error });
     }
 };

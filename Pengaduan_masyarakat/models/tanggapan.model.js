@@ -5,13 +5,13 @@ const { DataTypes } = Sequelize;
 
 const Tanggapan = db.define("tanggapan", {
     id_tanggapan: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
     id_petugas: DataTypes.STRING,
-    id_pengaduan: DataTypes.STRING,
-    tgl_pengaduan: {
+    id_pengaduan: DataTypes.INTEGER,
+    tgl_tanggapan: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
