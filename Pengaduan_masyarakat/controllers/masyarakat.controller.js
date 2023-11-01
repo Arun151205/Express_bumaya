@@ -59,31 +59,23 @@ export const createMasyarakat = async (req, res) => {
 export const editMasyarakat = async (req, res) => {
     const user = await Masyarakat.findOne({
         where: {
-            uuid: req.params.id,
+            nik: req.params.id,
         },
     });
     if (!user) return res.status(404).json({ message: "User tidak ditemukan!" });
     
-    const { nik, nama, username, password, telp } = req.body;
-    let hashPassword;
-    if (password === "" || password === null) {
-        hashPassword = user.password;
-    } else {
-        hashPassword = await argon2.hash(password);
-    }
+    const { nama, username, telp } = req.body;
     
     try {
         await Masyarakat.update(
         {
-            nik: nik || user.nik,
             nama: nama || user.nama,
             username: username || user.username,
-            password: hashPassword,
             telp: telp || user.telp,
         },
         {
             where: {
-                uuid: req.params.id,
+                nik: req.params.id,
             },
         }
     );
@@ -96,7 +88,7 @@ export const editMasyarakat = async (req, res) => {
 export const deleteMasyarakat = async (req, res) => {
     const user = await Masyarakat.findOne({
         where: {
-            uuid: req.params.id,
+            nik: req.params.id,
         },
     });
     if (!user)
@@ -104,7 +96,7 @@ export const deleteMasyarakat = async (req, res) => {
     try {
         await Masyarakat.destroy({
         where: {
-            uuid: req.params.id,
+            nik: req.params.id,
         },
     });
     res.status(200).json({ message: "Berhasil menghapus akun!" });

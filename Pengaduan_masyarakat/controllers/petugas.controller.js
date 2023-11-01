@@ -56,22 +56,14 @@ export const editPetugas = async (req, res) => {
     });
     if (!user) return res.status(404).json({ message: "User tidak ditemukan!" });
 
-    const { nama_petugas, username, password, telp, level } = req.body;
-    let hashPassword;
-    if (password === "" || password === null) {
-        hashPassword = user.password;
-    } else {
-        hashPassword = await argon2.hash(password);
-    }
+    const { nama_petugas, username, telp} = req.body;
 
     try {
         await Petugas.update(
     {
         nama_petugas: nama_petugas || user.nama_petugas,
         username: username || user.username,
-        password: hashPassword,
         telp: telp || user.telp,
-        level: level || user.level,
     },
     {
         where: {

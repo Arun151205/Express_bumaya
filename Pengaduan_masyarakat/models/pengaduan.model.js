@@ -28,6 +28,6 @@ Tanggapan.belongsTo(Pengaduan, {foreignKey: "id_pengaduan"});
 
 export default Pengaduan;
 
-(async()=>{
-    await db.sync();
-})();
+// (async()=>{
+//     await db.sync();
+// })();
