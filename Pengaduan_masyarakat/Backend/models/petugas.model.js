@@ -30,6 +30,6 @@ Tanggapan.belongsTo(Petugas, {foreignKey: "id_petugas"});
 
 export default Petugas;
 
-// (async() => {
-//     await db.sync();
-// })();
+(async() => {
+    await db.sync();
+})();

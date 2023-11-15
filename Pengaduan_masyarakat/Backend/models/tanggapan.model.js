@@ -24,6 +24,6 @@ const Tanggapan = db.define("tanggapan", {
 
 export default Tanggapan;
 
-// (async() => {
-//     await db.sync();
-// })();
+(async() => {
+    await db.sync();
+})();

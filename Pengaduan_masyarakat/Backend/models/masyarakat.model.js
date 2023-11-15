@@ -34,6 +34,6 @@ Pengaduan.belongsTo(Masyarakat, { foreignKey: "nik"});
 
 export default Masyarakat;
 
-// (async () => {
-//     await db.sync();
-// })();
+(async () => {
+    await db.sync();
+})();
