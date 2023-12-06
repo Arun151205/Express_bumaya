@@ -1,22 +1,17 @@
+import express from "express";
+import fileUpload from "express-fileupload";
+import Route from "./routes/Route.js";
+import cookieParser from "cookie-parser";
 import cors from "cors";
-import express  from "express";
-import FileUpload from "express-fileupload";
-import MasyarakatRoutes from "./routes/masyarakat.route.js";
-import PengaduanRoutes from "./routes/pengaduan.route.js";
-import PetugasRoutes from "./routes/petugas.route.js";
-import TanggapanRoutes from "./routes/tanggapan.route.js";
 
 const app = express();
+const port = 5000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
-app.use(FileUpload());
+app.use(fileUpload());
+app.use(express.static("public"))
+app.use(cookieParser());
+app.use(Route);
 
-// routes
-app.use(MasyarakatRoutes);
-app.use(PengaduanRoutes);
-app.use(PetugasRoutes);
-app.use(TanggapanRoutes);
-
-app.listen(5000, ()=> console.log('Server Up and Running on port 5000'));
+app.listen(port, () => console.log(`server berjalan di http://localhost:${port}`))

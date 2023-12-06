@@ -1,12 +1,13 @@
 import {BrowserRouter,Routes,Route} from "react-router-dom"
-import Dashboard from "./pages/Dashboard.jsx"
+import Sidebar from "./components/Sidebar.jsx"
+
 
 function App() {
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard/>} />
+        <Route path="/" element={<Sidebar/>} />
       </Routes>
     </BrowserRouter>
   )
