@@ -1,6 +1,7 @@
-const { Sequelize } = require("sequelize");
-const db = require("../config/Database.js");
-
+import { Sequelize } from "sequelize";
+import db from "../config/db.js";
+import Pengaduan from "./PengaduanModel.js";
+import Petugas from "./PetugasModel.js";
 
 const {DataTypes} = Sequelize;
 
@@ -14,8 +15,23 @@ const Tanggapan = db.define("tanggapan",{
     tanggapan:DataTypes.TEXT,
 })
 
-module.exports = Tanggapan;
+Tanggapan.belongsTo(Pengaduan,{
+    foreignKey:"id_pengaduan",
+    onDelete:"CASCADE"
+})
 
-// (async () => {
-//     await db.sync();
-// })();
+Pengaduan.hasMany(Tanggapan, {
+    foreignKey: "id_pengaduan"
+})
+
+Tanggapan.belongsTo(Petugas,{
+    foreignKey:"id_petugas",
+})
+
+Petugas.hasMany(Tanggapan,{
+    foreignKey:"id_petugas"
+})
+
+// await Tanggapan.sync();
+
+export default Tanggapan;

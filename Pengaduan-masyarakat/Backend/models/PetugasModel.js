@@ -1,5 +1,5 @@
-const { Sequelize } = require("sequelize");
-const db = require("../config/Database.js");
+import { Sequelize } from "sequelize";
+import db from "../config/db.js";
 
 const { DataTypes } = Sequelize;
 
@@ -9,15 +9,19 @@ const Petugas = db.define("petugas", {
         defaultValue: DataTypes.UUIDV1,
         primaryKey: true,
     },
-    nama_petugas: DataTypes.STRING,
+    nama_petugas:{
+        type:DataTypes.STRING,
+        unique:true,
+    },
     username: DataTypes.STRING,
     password: DataTypes.STRING,
     telp: DataTypes.STRING,
-    level: DataTypes.ENUM('Admin', 'Petugas' ),
+    level: {
+        type:DataTypes.STRING,
+        allowNull:false,
+    },
 })
 
-module.exports = Petugas;
+// await Petugas.sync();
 
-// (async () => {
-//     await db.sync();
-// })();
+export default Petugas;

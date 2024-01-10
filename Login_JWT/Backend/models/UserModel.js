@@ -21,3 +21,5 @@ const Users = db.define('users',{
 });
 
 export default Users;
+
+await Users.sync();

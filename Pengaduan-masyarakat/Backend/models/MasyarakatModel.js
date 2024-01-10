@@ -1,5 +1,5 @@
-const { Sequelize } = require("sequelize");
-const db = require("../config/Database.js");
+import { Sequelize } from "sequelize";
+import db from "../config/db.js";
 
 const {DataTypes} = Sequelize;
 
@@ -14,8 +14,6 @@ const Masyarakat = db.define("masyarakat",{
     telp:DataTypes.STRING,
 },{freezeTableName:true})
 
-module.exports = Masyarakat;
+// await Masyarakat.sync();
 
-// (async () => {
-//     await db.sync();
-// })();
+export default Masyarakat;

@@ -1,24 +1,25 @@
-const { Sequelize } = require("sequelize");
-const db = require("../config/Database.js");
+import { Sequelize } from "sequelize";
+import db from "../config/db.js";
+import Masyarakat from "./MasyarakatModel.js";
 
 const { DataTypes } = Sequelize;
 
 const Pengaduan = db.define("pengaduan", {
-  id_pengaduan: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV1,
-    primaryKey: true,
-  },
-  tgl_pengaduan: { type: DataTypes.DATE, defaultValue: Sequelize.NOW() },
-  nik: DataTypes.STRING,
-  isi_laporan: DataTypes.TEXT,
-  foto: DataTypes.STRING,
-  url: DataTypes.STRING,
-  status: DataTypes.STRING,
-});
+    id_pengaduan: {
+        type: DataTypes.UUID,
+        defaultValue:DataTypes.UUIDV1,
+        primaryKey: true,
+    },
+    tgl_pengaduan: DataTypes.DATE,
+    isi_laporan: DataTypes.TEXT,
+    foto: DataTypes.STRING,
+    url: DataTypes.STRING,
+    status: DataTypes.STRING,
+})
 
-module.exports = Pengaduan;
+Pengaduan.belongsTo(Masyarakat,{foreignKey:"nik"});
+Masyarakat.hasMany(Pengaduan,{foreignKey:"nik"});
 
-// (async () => {
-//   await db.sync();
-// })();
+// await Pengaduan.sync();
+
+export default Pengaduan;

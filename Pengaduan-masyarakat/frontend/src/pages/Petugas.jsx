@@ -104,7 +104,7 @@ export default function Petugas () {
                 )
                 : 
                     <tr  >
-                        <td colSpan="7" className="text-center" >Tidak ada Data 😋</td>
+                        <td colSpan="7" className="text-center" >Tidak ada Data</td>
                     </tr>
                 }
             </tbody>
